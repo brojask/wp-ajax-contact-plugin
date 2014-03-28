@@ -19,14 +19,11 @@ ajaxurl = '<?php echo admin_url( 'admin-ajax.php'); ?>';
 }
 
 function send_mail(){
-	//require_once("libs/class.correo.php");
-    
     $admin_email = get_option('admin_email');
     $nombre = $_POST['name'];
     $mensaje = $_POST['message'];
     $email_cliente = $_POST['email'];    
     $headers = 'From:' . $email_cliente . "rn";
-    //$enviado = $correo->enviar('brojask@gmail.com', $nombre, $mensaje, $email_cliente);
     $enviado = wp_mail($admin_email, 'Code Factory', $mensaje, $headers);    
     if ($enviado) {
         $json['state'] = true;
@@ -34,7 +31,6 @@ function send_mail(){
     } else {
         $json['state'] = false;
         $json['message'] = '¡No enviado!';
-        //$json['console'] = $correo->ErrorInfo;
     }
     echo json_encode($json);
     die();
