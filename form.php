@@ -36,5 +36,44 @@
 </div>
 </div>
 </div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://jquery.bassistance.de/validate/jquery.validate.js"></script>
+<script>
+jQuery('.contact-form').each(function() {
+        jQuery(this).validate({
+            rules: {
+                name: {minlength: 3},
+                email: {email: true},
+                message: {minlength: 50}
+            },
+            messages: {
+                name: 'Debes agregar mínimo 3 letras',
+                email: 'Debes colocar un e-Mail válido.',
+                message: 'Debes ingresar al menos 50 letras en tu mensaje.'
+            },
+            submitHandler: function(form) {
+                jQuery.ajax({
+                    url: ajaxurl,
+                    method: 'POST',
+                    data: jQuery(form).serialize()+'&action=send_mail',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        //runSpinner();
+                    },
+                    success: function(d) {
+                        if (d.state) {
+                            successNoty(d.message, 'success', 2000);
+                            jQuery(form).reset();
+                        } else {
+                            successNoty(d.message, 'error');
+                            console.log(d.console);
+                        }
+                    }
+                });
+                return false;
+            }
+        });
+    });
+</script>
 </body>
 </html>
